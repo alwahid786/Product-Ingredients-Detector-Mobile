@@ -36,7 +36,7 @@
 
 
               <div class="d-flex justify-content-center login-button-outer ">
-                <a href="{{url('/dashboard')}}" class="btn login-btn"> login
+                <a href="{{url('/tags')}}" class="btn login-btn"> login
 
                 </a>
                 <!-- <button type="" class="btn  login-btn">Login</button> -->

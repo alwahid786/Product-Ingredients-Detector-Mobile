@@ -49,7 +49,7 @@
             </div>
         </form>
         <form class="form-inline  mt-2 mt-md-0 ml-auto navbar-header-right-section pt-2 pt-lg-0">
-            <div class="form-group has-search mr-4">
+            <!-- <div class="form-group has-search mr-4">
                 <div class="dropdown">
                     <img src="{{asset('public/assets/images/bn-bell-icon.svg')}}" class="dropdown-toggle icon-button" id="dropdownMenuButton" data-toggle="dropdown">
                     <span class="icon-button__badge"></span>
@@ -92,7 +92,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="form-group has-search profile mr-4">
                 <img src="{{asset('public/assets/images/profile.svg')}}" class="mr-2">
                 <span>Name here</span>
