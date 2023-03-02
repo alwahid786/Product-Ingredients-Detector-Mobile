@@ -48,9 +48,9 @@ class ProductController extends Controller
             $name = $request->product_name;
         }
         $result = Result::where(['device_id' => $request->device_id, 'product_name' => $name])->first();
-        // if ($result) {
-        //     return $this->sendError('You have already searched for this product, Check your history to view product details.');
-        // }
+        if ($result) {
+            return $this->sendError('You have already searched for this product, Check your history to view product details.');
+        }
         $restrictedTags = Tags::pluck('tag_name')->toArray();
         $client = new Client();
         // Check If request has product_code & != ""
