@@ -238,8 +238,21 @@ class ProductController extends Controller
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
+        $restrictedTags = Tags::pluck('tag_name')->toArray();
         $results = Result::where('device_id', $request->device_id)->get();
         if (!empty($results)) {
+            foreach ($results as $result) {
+                // Get the common elements between both arrays
+                $restrictedIngredients = array_intersect($result['ingredients'], $restrictedTags);
+                // Remove the common elements from the first array
+                $result['ingredients'] = array_diff($result['ingredients'], $restrictedIngredients);
+                $result['restrictedIngredients'] = $restrictedIngredients;
+                if (empty($restrictedIngredients)) {
+                    $result['is_harmful'] = 0;
+                } else {
+                    $result['is_harmful']  = 1;
+                }
+            }
             return $this->sendResponse($results, 'History Data.');
         }
         return $this->sendError('You have no history.');
