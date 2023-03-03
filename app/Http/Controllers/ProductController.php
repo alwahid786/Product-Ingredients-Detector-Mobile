@@ -119,7 +119,7 @@ class ProductController extends Controller
                         'ingredients' => $cosmeticIngredients,
                         'device_id' => $request->device_id,
                         'is_harmful' => $harmful,
-                        'status' => 1,
+                        'status' => 1
 
                     ]);
                     return $this->sendResponse($successBeauty, 'Found Successfully');
@@ -157,7 +157,7 @@ class ProductController extends Controller
                     'ingredients' => $foodIngredients,
                     'device_id' => $request->device_id,
                     'is_harmful' => 0,
-                    'status' => 1,
+                    'status' => 1
 
                 ]);
                 return $this->sendResponse($successFood, 'Found Successfully');
@@ -193,7 +193,7 @@ class ProductController extends Controller
                         'ingredients' => $cosmeticIngredients,
                         'device_id' => $request->device_id,
                         'is_harmful' => $harmful,
-                        'status' => 1,
+                        'status' => 1
                     ]);
                     return $this->sendResponse($successBeauty, 'Found Successfully');
                 }
@@ -206,7 +206,7 @@ class ProductController extends Controller
             'ingredients' => [],
             'device_id' => $request->device_id,
             'is_harmful' => 0,
-            'status' => 0,
+            'status' => 0
         ]);
         return $this->sendError('No data found against this product.');
     }
