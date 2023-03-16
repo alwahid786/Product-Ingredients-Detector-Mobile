@@ -73,14 +73,14 @@ class ProductController extends Controller
                     $harmful = 1;
                 }
                 $successFood = [];
-                $successFood['product_name'] = $responseFood['product']['product_name'];
-                $successFood['product_img'] = $responseFood['product']['image_front_url'];
+                $successFood['product_name'] = $responseFood['product']['product_name'] ?? '';
+                $successFood['product_img'] = $responseFood['product']['image_front_url'] ?? '';
                 $successFood['is_harmful'] = $harmful;
                 $successFood['ingredients'] = $foodIngredients;
                 $successFood['restrictedIngredients'] = $restrictedIngredients;
                 Result::create([
                     'product_name' => $name,
-                    'product_img' => $responseFood['product']['image_front_url'],
+                    'product_img' => $responseFood['product']['image_front_url'] ?? '',
                     'ingredients' => $foodIngredients,
                     'device_id' => $request->device_id,
                     'is_harmful' => 0,
@@ -108,14 +108,14 @@ class ProductController extends Controller
                         $harmful = 1;
                     }
                     $successBeauty = [];
-                    $successBeauty['product_name'] = $responseCosmetic['product']['product_name'];
-                    $successBeauty['product_img'] = $responseCosmetic['product']['image_front_url'];
+                    $successBeauty['product_name'] = $responseCosmetic['product']['product_name'] ?? '';
+                    $successBeauty['product_img'] = $responseCosmetic['product']['image_front_url'] ?? '';
                     $successBeauty['is_harmful'] = 0;
                     $successBeauty['ingredients'] = $cosmeticIngredients;
                     $successBeauty['restrictedIngredients'] = $restrictedIngredients;
                     Result::create([
                         'product_name' => $name,
-                        'product_img' => $responseCosmetic['product']['image_front_url'],
+                        'product_img' => $responseCosmetic['product']['image_front_url'] ?? '',
                         'ingredients' => $cosmeticIngredients,
                         'device_id' => $request->device_id,
                         'is_harmful' => $harmful,
@@ -146,14 +146,14 @@ class ProductController extends Controller
                     $harmful = 1;
                 }
                 $successFood = [];
-                $successFood['product_name'] = $responseFood['products'][0]['product_name'];
-                $successFood['product_img'] = $responseFood['products'][0]['image_front_url'];
+                $successFood['product_name'] = $responseFood['products'][0]['product_name'] ?? '';
+                $successFood['product_img'] = $responseFood['products'][0]['image_front_url'] ?? '';
                 $successFood['is_harmful'] = $harmful;
                 $successFood['ingredients'] = $foodIngredients;
                 $successFood['restrictedIngredients'] = $restrictedIngredients;
                 Result::create([
                     'product_name' => $name,
-                    'product_img' => $responseFood['products'][0]['image_front_url'],
+                    'product_img' => $responseFood['products'][0]['image_front_url'] ?? '',
                     'ingredients' => $foodIngredients,
                     'device_id' => $request->device_id,
                     'is_harmful' => 0,
@@ -182,14 +182,14 @@ class ProductController extends Controller
                         $harmful = 1;
                     }
                     $successBeauty = [];
-                    $successBeauty['product_name'] = $responseCosmetic['products'][0]['product_name'];
-                    $successBeauty['product_img'] = $responseCosmetic['products'][0]['image_front_small_url'];
+                    $successBeauty['product_name'] = $responseCosmetic['products'][0]['product_name'] ?? '';
+                    $successBeauty['product_img'] = $responseCosmetic['products'][0]['image_front_small_url'] ?? '';
                     $successBeauty['is_harmful'] = $harmful;
                     $successBeauty['ingredients'] = $cosmeticIngredients;
                     $successBeauty['restrictedIngredients'] = $restrictedIngredients;
                     Result::create([
                         'product_name' => $name,
-                        'product_img' => $responseCosmetic['products'][0]['image_front_small_url'],
+                        'product_img' => $responseCosmetic['products'][0]['image_front_small_url'] ?? '',
                         'ingredients' => $cosmeticIngredients,
                         'device_id' => $request->device_id,
                         'is_harmful' => $harmful,
