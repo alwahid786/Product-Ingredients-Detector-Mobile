@@ -124,6 +124,70 @@ class ProductController extends Controller
                     ]);
                     return $this->sendResponse($successBeauty, 'Found Successfully');
                 }
+                // Sephora API starts HERE
+                else{
+                    $curl = curl_init(); //3378872105602
+                    curl_setopt_array($curl, [
+                        CURLOPT_URL => "https://sephora.p.rapidapi.com/products/v2/search-by-barcode?upcs='.$request->product_code.'&country=SG&language=en-SG",
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_FOLLOWLOCATION => true,
+                        CURLOPT_ENCODING => "",
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 30,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => "GET",
+                        CURLOPT_HTTPHEADER => [
+                            "X-RapidAPI-Host: sephora.p.rapidapi.com",
+                            "X-RapidAPI-Key: e6bc3ce822msh8f140b8144727a9p11e011jsnb59211620217"
+                        ],
+                    ]);
+
+                    $response = curl_exec($curl);
+                    $err = curl_error($curl);
+
+                    curl_close($curl);
+                    $response = json_decode($response);
+                    if(isset($response->data)){
+                        $product_id = $response->data->attributes->{'product-id'} ?? '';
+
+                        $curl = curl_init();
+
+                        curl_setopt_array($curl, [
+                            CURLOPT_URL => "https://sephora.p.rapidapi.com/products/v2/detail?id=$product_id&country=SG&language=en-SG",
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_ENCODING => "",
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 30,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => "GET",
+                            CURLOPT_HTTPHEADER => [
+                                "X-RapidAPI-Host: sephora.p.rapidapi.com",
+                                "X-RapidAPI-Key: e6bc3ce822msh8f140b8144727a9p11e011jsnb59211620217"
+                            ],
+                        ]);
+
+                        $response = curl_exec($curl);
+                        $response = json_decode($response);
+                        $image = $response->data->attributes->{'image-urls'}[0];
+                        $successBeauty = [];
+                        $successBeauty['product_name'] = $response->data->attributes->{'name'} ?? '';
+                        $successBeauty['product_img'] = $response->data->attributes->{'image-urls'}[0] ?? '';
+                        $successBeauty['is_harmful'] = 0;
+                        $successBeauty['ingredients'] = $response->data->attributes->{'ingredients'} ?? '';
+                        $successBeauty['restrictedIngredients'] = [];
+                        Result::create([
+                            'product_name' => $name,
+                            'product_img' => $response->data->attributes->{'image-urls'}[0] ?? '',
+                            'ingredients' => $response->data->attributes->{'ingredients'} ?? '',
+                            'device_id' => $request->device_id,
+                            'is_harmful' => 0,
+                            'status' => 1
+                        ]);
+                        return $this->sendResponse($successBeauty, 'Found Successfully');
+
+                    }
+                }
             }
         } elseif ($request->product_name != "") {
             $urlFood = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' . $request->product_name . '&search_simple=1&action=process&json=1&page_size=1';
@@ -256,5 +320,63 @@ class ProductController extends Controller
             return $this->sendResponse($results, 'History Data.');
         }
         return $this->sendError('You have no history.');
+    }
+
+    public function testCurl(Request $request)
+    {
+
+        $curl = curl_init();
+                    curl_setopt_array($curl, [
+                        CURLOPT_URL => "https://sephora.p.rapidapi.com/products/v2/search-by-barcode?upcs=3378872105602&country=SG&language=en-SG",
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_FOLLOWLOCATION => true,
+                        CURLOPT_ENCODING => "",
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 30,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => "GET",
+                        CURLOPT_HTTPHEADER => [
+                            "X-RapidAPI-Host: sephora.p.rapidapi.com",
+                            "X-RapidAPI-Key: e6bc3ce822msh8f140b8144727a9p11e011jsnb59211620217"
+                        ],
+                    ]);
+
+                    $response = curl_exec($curl);
+                    $err = curl_error($curl);
+
+                    curl_close($curl);
+                    $response = json_decode($response);
+                    if(isset($response->data)){
+                        $product_id = $response->data->attributes->{'product-id'} ?? '';
+
+                        $curl = curl_init();
+
+                        curl_setopt_array($curl, [
+                            CURLOPT_URL => "https://sephora.p.rapidapi.com/products/v2/detail?id=$product_id&country=SG&language=en-SG",
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_ENCODING => "",
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 30,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => "GET",
+                            CURLOPT_HTTPHEADER => [
+                                "X-RapidAPI-Host: sephora.p.rapidapi.com",
+                                "X-RapidAPI-Key: e6bc3ce822msh8f140b8144727a9p11e011jsnb59211620217"
+                            ],
+                        ]);
+
+                        $response = curl_exec($curl);
+                        $response = json_decode($response);
+                        $image = $response->data->attributes->{'name'};
+                        print_r($image);
+
+                    }
+
+    }
+
+    public function beautyBay()
+    {
+
     }
 }

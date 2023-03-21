@@ -19,5 +19,7 @@ use App\Http\Controllers\ProductController;
 // Route::post('/search/product', [ProductController::class, 'searchProduct']);
 Route::post('/ingredients', [ProductController::class, 'getIngredients']);
 Route::post('/history', [ProductController::class, 'history']);
-// Add restricted tag Admin 
+// Add restricted tag Admin
 Route::post('/add/tag', [ProductController::class, 'addTag']);
+Route::post('/test_curl', [ProductController::class, 'testCurl']);
+Route::post('/beauty_bay', [ProductController::class, 'beautyBay']);
