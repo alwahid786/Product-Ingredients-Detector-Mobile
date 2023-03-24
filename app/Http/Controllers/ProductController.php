@@ -329,7 +329,6 @@ class ProductController extends Controller
                         }
                     }
                 }else{
-                    dd('coming');
                     // Sephora Name API Starts Here
                     $curl = curl_init();
 
