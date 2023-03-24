@@ -328,7 +328,7 @@ class ProductController extends Controller
                             }
                         }
                     } else {
-                        return $this->sendResponse($successBeauty, 'Not Found Successfully');
+                        return $this->sendError('Not Found Successfully');
                         // continue;
                     }
                     }
