@@ -55,40 +55,40 @@ class ProductController extends Controller
         $client = new Client();
         // Check If request has product_code & != ""
         if ($request->product_code != "") {
-            $urlFood = 'https://world.openfoodfacts.org/api/v0/product/' . $request->product_code . '.json';
-            $responseFood = $client->request('GET', $urlFood);
-            $responseFood = json_decode($responseFood->getBody()->getContents(), true);
-            if ($responseFood['status'] == 1 && isset($responseFood['product']['ingredients'])) {
-                $foodIngredients = [];
-                foreach ($responseFood['product']['ingredients'] as $ingredients) {
-                    $foodIngredients[] = trim($ingredients['id'], 'en:fr:');
-                }
-                // Get the common elements between both arrays
-                $restrictedIngredients = array_intersect($foodIngredients, $restrictedTags);
-                // Remove the common elements from the first array
-                $foodIngredients = array_diff($foodIngredients, $restrictedIngredients);
-                if (empty($restrictedIngredients)) {
-                    $harmful = 0;
-                } else {
-                    $harmful = 1;
-                }
-                $successFood = [];
-                $successFood['product_name'] = $responseFood['product']['product_name'] ?? '';
-                $successFood['product_img'] = $responseFood['product']['image_front_url'] ?? '';
-                $successFood['is_harmful'] = $harmful;
-                $successFood['ingredients'] = $foodIngredients;
-                $successFood['restrictedIngredients'] = $restrictedIngredients;
-                Result::create([
-                    'product_name' => $name,
-                    'product_img' => $responseFood['product']['image_front_url'] ?? '',
-                    'ingredients' => $foodIngredients,
-                    'device_id' => $request->device_id,
-                    'is_harmful' => 0,
-                    'status' => 1,
+            // $urlFood = 'https://world.openfoodfacts.org/api/v0/product/' . $request->product_code . '.json';
+            // $responseFood = $client->request('GET', $urlFood);
+            // $responseFood = json_decode($responseFood->getBody()->getContents(), true);
+            // if ($responseFood['status'] == 1 && isset($responseFood['product']['ingredients'])) {
+            //     $foodIngredients = [];
+            //     foreach ($responseFood['product']['ingredients'] as $ingredients) {
+            //         $foodIngredients[] = trim($ingredients['id'], 'en:fr:');
+            //     }
+            //     // Get the common elements between both arrays
+            //     $restrictedIngredients = array_intersect($foodIngredients, $restrictedTags);
+            //     // Remove the common elements from the first array
+            //     $foodIngredients = array_diff($foodIngredients, $restrictedIngredients);
+            //     if (empty($restrictedIngredients)) {
+            //         $harmful = 0;
+            //     } else {
+            //         $harmful = 1;
+            //     }
+            //     $successFood = [];
+            //     $successFood['product_name'] = $responseFood['product']['product_name'] ?? '';
+            //     $successFood['product_img'] = $responseFood['product']['image_front_url'] ?? '';
+            //     $successFood['is_harmful'] = $harmful;
+            //     $successFood['ingredients'] = $foodIngredients;
+            //     $successFood['restrictedIngredients'] = $restrictedIngredients;
+            //     Result::create([
+            //         'product_name' => $name,
+            //         'product_img' => $responseFood['product']['image_front_url'] ?? '',
+            //         'ingredients' => $foodIngredients,
+            //         'device_id' => $request->device_id,
+            //         'is_harmful' => 0,
+            //         'status' => 1,
 
-                ]);
-                return $this->sendResponse($successFood, 'Found Successfully');
-            } else {
+            //     ]);
+            //     return $this->sendResponse($successFood, 'Found Successfully');
+            // } else {
                 $urlBeauty = 'https://world.openbeautyfacts.org/api/v0/product/' . $request->product_code . '.json';
                 // Check for Cosmetic using OpenBeautyFact API
                 $responseCosmetic = $client->request('GET', $urlBeauty);
@@ -127,8 +127,9 @@ class ProductController extends Controller
                 // Sephora API starts HERE
                 else{
                     $curl = curl_init(); //3378872105602
+                    // $barcode = '3378872105602';
                     curl_setopt_array($curl, [
-                        CURLOPT_URL => "https://sephora.p.rapidapi.com/products/v2/search-by-barcode?upcs='.$request->product_code.'&country=SG&language=en-SG",
+                        CURLOPT_URL => "https://sephora.p.rapidapi.com/products/v2/search-by-barcode?upcs=' .$request->product_code. '&country=SG&language=en-SG",
                         CURLOPT_RETURNTRANSFER => true,
                         CURLOPT_FOLLOWLOCATION => true,
                         CURLOPT_ENCODING => "",
@@ -188,44 +189,44 @@ class ProductController extends Controller
 
                     }
                 }
-            }
+            // }
         } elseif ($request->product_name != "") {
-            $urlFood = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' . $request->product_name . '&search_simple=1&action=process&json=1&page_size=1';
-            // First Check for Food using OpenFoodFact API
-            $responseFood = $client->request('GET', $urlFood);
-            $responseFood = json_decode($responseFood->getBody()->getContents(), true);
-            // return $responseFood;
-            if (!empty($responseFood['products']) && isset($responseFood['products'][0]['ingredients'])) {
-                $foodIngredients = [];
-                foreach ($responseFood['products'][0]['ingredients'] as $ingredients) {
-                    $foodIngredients[] = trim($ingredients['id'], 'en:fr:');
-                }
-                // Get the common elements between both arrays
-                $restrictedIngredients = array_intersect($foodIngredients, $restrictedTags);
-                // Remove the common elements from the first array
-                $foodIngredients = array_diff($foodIngredients, $restrictedIngredients);
-                if (empty($restrictedIngredients)) {
-                    $harmful = 0;
-                } else {
-                    $harmful = 1;
-                }
-                $successFood = [];
-                $successFood['product_name'] = $responseFood['products'][0]['product_name'] ?? '';
-                $successFood['product_img'] = $responseFood['products'][0]['image_front_url'] ?? '';
-                $successFood['is_harmful'] = $harmful;
-                $successFood['ingredients'] = $foodIngredients;
-                $successFood['restrictedIngredients'] = $restrictedIngredients;
-                Result::create([
-                    'product_name' => $name,
-                    'product_img' => $responseFood['products'][0]['image_front_url'] ?? '',
-                    'ingredients' => $foodIngredients,
-                    'device_id' => $request->device_id,
-                    'is_harmful' => 0,
-                    'status' => 1
+            // $urlFood = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' . $request->product_name . '&search_simple=1&action=process&json=1&page_size=1';
+            // // First Check for Food using OpenFoodFact API
+            // $responseFood = $client->request('GET', $urlFood);
+            // $responseFood = json_decode($responseFood->getBody()->getContents(), true);
+            // // return $responseFood;
+            // if (!empty($responseFood['products']) && isset($responseFood['products'][0]['ingredients'])) {
+            //     $foodIngredients = [];
+            //     foreach ($responseFood['products'][0]['ingredients'] as $ingredients) {
+            //         $foodIngredients[] = trim($ingredients['id'], 'en:fr:');
+            //     }
+            //     // Get the common elements between both arrays
+            //     $restrictedIngredients = array_intersect($foodIngredients, $restrictedTags);
+            //     // Remove the common elements from the first array
+            //     $foodIngredients = array_diff($foodIngredients, $restrictedIngredients);
+            //     if (empty($restrictedIngredients)) {
+            //         $harmful = 0;
+            //     } else {
+            //         $harmful = 1;
+            //     }
+            //     $successFood = [];
+            //     $successFood['product_name'] = $responseFood['products'][0]['product_name'] ?? '';
+            //     $successFood['product_img'] = $responseFood['products'][0]['image_front_url'] ?? '';
+            //     $successFood['is_harmful'] = $harmful;
+            //     $successFood['ingredients'] = $foodIngredients;
+            //     $successFood['restrictedIngredients'] = $restrictedIngredients;
+            //     Result::create([
+            //         'product_name' => $name,
+            //         'product_img' => $responseFood['products'][0]['image_front_url'] ?? '',
+            //         'ingredients' => $foodIngredients,
+            //         'device_id' => $request->device_id,
+            //         'is_harmful' => 0,
+            //         'status' => 1
 
-                ]);
-                return $this->sendResponse($successFood, 'Found Successfully');
-            } else {
+            //     ]);
+            //     return $this->sendResponse($successFood, 'Found Successfully');
+            // } else {
                 $urlBeauty = 'https://world.openbeautyfacts.org/cgi/search.pl?search_terms=' . $request->product_name . '&search_simple=1&action=process&json=1&page_size=1';
                 // Check for Cosmetic using OpenBeautyFact API
                 $responseCosmetic = $client->request('GET', $urlBeauty);
@@ -233,36 +234,168 @@ class ProductController extends Controller
                 // return $responseCosmetic['products'];
                 if (!empty($responseCosmetic['products'])) {
                     $cosmeticIngredients = [];
-                    foreach ($responseCosmetic['products'][0]['ingredients'] as $ingredients) {
-                        $cosmeticIngredients[] = trim($ingredients['text'], 'en:fr:');
+                    if(isset($responseCosmetic['products'][0]['ingredients'])){
+                        foreach ($responseCosmetic['products'][0]['ingredients'] as $ingredients) {
+                            $cosmeticIngredients[] = trim($ingredients['text'], 'en:fr:');
+                        }
+                        // Get the common elements between both arrays
+                        $restrictedIngredients = array_intersect($cosmeticIngredients, $restrictedTags);
+                        // Remove the common elements from the first array
+                        $cosmeticIngredients = array_diff($cosmeticIngredients, $restrictedIngredients);
+                        if (empty($restrictedIngredients)) {
+                            $harmful = 0;
+                        } else {
+                            $harmful = 1;
+                        }
+                        $successBeauty = [];
+                        $successBeauty['product_name'] = $responseCosmetic['products'][0]['product_name'] ?? '';
+                        $successBeauty['product_img'] = $responseCosmetic['products'][0]['image_front_small_url'] ?? '';
+                        $successBeauty['is_harmful'] = $harmful;
+                        $successBeauty['ingredients'] = $cosmeticIngredients;
+                        $successBeauty['restrictedIngredients'] = $restrictedIngredients;
+                        Result::create([
+                            'product_name' => $name,
+                            'product_img' => $responseCosmetic['products'][0]['image_front_small_url'] ?? '',
+                            'ingredients' => $cosmeticIngredients,
+                            'device_id' => $request->device_id,
+                            'is_harmful' => $harmful,
+                            'status' => 1
+                        ]);
+                        return $this->sendResponse($successBeauty, 'Found Successfully');
                     }
-                    // Get the common elements between both arrays
-                    $restrictedIngredients = array_intersect($cosmeticIngredients, $restrictedTags);
-                    // Remove the common elements from the first array
-                    $cosmeticIngredients = array_diff($cosmeticIngredients, $restrictedIngredients);
-                    if (empty($restrictedIngredients)) {
-                        $harmful = 0;
-                    } else {
-                        $harmful = 1;
+                    else{
+                        // Sephora Name API Starts Here
+                        $curl = curl_init();
+
+                        curl_setopt_array($curl, [
+                            CURLOPT_URL => "https://sephora.p.rapidapi.com/v2/auto-complete?query='. $request->product_name .'&country=SG&language=en-SG",
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_FOLLOWLOCATION => true,
+                            CURLOPT_ENCODING => "",
+                            CURLOPT_MAXREDIRS => 10,
+                            CURLOPT_TIMEOUT => 30,
+                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                            CURLOPT_CUSTOMREQUEST => "GET",
+                            CURLOPT_HTTPHEADER => [
+                                "X-RapidAPI-Host: sephora.p.rapidapi.com",
+                                "X-RapidAPI-Key: e6bc3ce822msh8f140b8144727a9p11e011jsnb59211620217"
+                            ],
+                        ]);
+
+                        $response = curl_exec($curl);
+                        $response =json_decode($response);
+                        foreach($response->included as $product){
+                            if(isset($product->attributes->name) && (isset($product->attributes->ingredients) && $product->attributes->ingredients != null)){
+                                $proname = $product->attributes->name;
+                                $ingredients = $product->attributes->ingredients;
+                                $proingredients = explode(', ', $ingredients);
+                                $imgUrls = 'image-urls';
+                                if(isset($product->attributes->$imgUrls) && !empty($product->attributes->$imgUrls)){
+                                    $proimage = $product->attributes->$imgUrls[0];
+                                }
+
+                                $cosmeticIngredients = [];
+                                foreach ($proingredients as $ingredients) {
+                                    $cosmeticIngredients[] = $ingredients;
+                                }
+                                // Get the common elements between both arrays
+                                $restrictedIngredients = array_intersect($cosmeticIngredients, $restrictedTags);
+                                // Remove the common elements from the first array
+                                $cosmeticIngredients = array_diff($cosmeticIngredients, $restrictedIngredients);
+                                if (empty($restrictedIngredients)) {
+                                    $harmful = 0;
+                                } else {
+                                    $harmful = 1;
+                                }
+                                $successBeauty = [];
+                                $successBeauty['product_name'] = $proname ?? '';
+                                $successBeauty['product_img'] = $proimage ?? '';
+                                $successBeauty['is_harmful'] = $harmful;
+                                $successBeauty['ingredients'] = $cosmeticIngredients;
+                                $successBeauty['restrictedIngredients'] = $restrictedIngredients;
+                                Result::create([
+                                    'product_name' => $name,
+                                    'product_img' => $proimage ?? '',
+                                    'ingredients' => $cosmeticIngredients,
+                                    'device_id' => $request->device_id,
+                                    'is_harmful' => $harmful,
+                                    'status' => 1
+                                ]);
+                                return $this->sendResponse($successBeauty, 'Found Successfully');
+                            }
+                            else{
+                                continue;
+                            }
+                        }
                     }
-                    $successBeauty = [];
-                    $successBeauty['product_name'] = $responseCosmetic['products'][0]['product_name'] ?? '';
-                    $successBeauty['product_img'] = $responseCosmetic['products'][0]['image_front_small_url'] ?? '';
-                    $successBeauty['is_harmful'] = $harmful;
-                    $successBeauty['ingredients'] = $cosmeticIngredients;
-                    $successBeauty['restrictedIngredients'] = $restrictedIngredients;
-                    Result::create([
-                        'product_name' => $name,
-                        'product_img' => $responseCosmetic['products'][0]['image_front_small_url'] ?? '',
-                        'ingredients' => $cosmeticIngredients,
-                        'device_id' => $request->device_id,
-                        'is_harmful' => $harmful,
-                        'status' => 1
+                }else{
+                    dd('coming');
+                    // Sephora Name API Starts Here
+                    $curl = curl_init();
+
+                    curl_setopt_array($curl, [
+                        CURLOPT_URL => "https://sephora.p.rapidapi.com/v2/auto-complete?query='. $request->product_name .'&country=SG&language=en-SG",
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_FOLLOWLOCATION => true,
+                        CURLOPT_ENCODING => "",
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 30,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => "GET",
+                        CURLOPT_HTTPHEADER => [
+                            "X-RapidAPI-Host: sephora.p.rapidapi.com",
+                            "X-RapidAPI-Key: e6bc3ce822msh8f140b8144727a9p11e011jsnb59211620217"
+                        ],
                     ]);
-                    return $this->sendResponse($successBeauty, 'Found Successfully');
+
+                    $response = curl_exec($curl);
+                    $response =json_decode($response);
+                    foreach($response->included as $product){
+                        if(isset($product->attributes->name) && (isset($product->attributes->ingredients) && $product->attributes->ingredients != null)){
+                            $proname = $product->attributes->name;
+                            $ingredients = $product->attributes->ingredients;
+                            $proingredients = explode(', ', $ingredients);
+                            $imgUrls = 'image-urls';
+                            if(isset($product->attributes->$imgUrls) && !empty($product->attributes->$imgUrls)){
+                                $proimage = $product->attributes->$imgUrls[0];
+                            }
+
+                            $cosmeticIngredients = [];
+                            foreach ($proingredients as $ingredients) {
+                                $cosmeticIngredients[] = $ingredients;
+                            }
+                            // Get the common elements between both arrays
+                            $restrictedIngredients = array_intersect($cosmeticIngredients, $restrictedTags);
+                            // Remove the common elements from the first array
+                            $cosmeticIngredients = array_diff($cosmeticIngredients, $restrictedIngredients);
+                            if (empty($restrictedIngredients)) {
+                                $harmful = 0;
+                            } else {
+                                $harmful = 1;
+                            }
+                            $successBeauty = [];
+                            $successBeauty['product_name'] = $proname ?? '';
+                            $successBeauty['product_img'] = $proimage ?? '';
+                            $successBeauty['is_harmful'] = $harmful;
+                            $successBeauty['ingredients'] = $cosmeticIngredients;
+                            $successBeauty['restrictedIngredients'] = $restrictedIngredients;
+                            Result::create([
+                                'product_name' => $name,
+                                'product_img' => $proimage ?? '',
+                                'ingredients' => $cosmeticIngredients,
+                                'device_id' => $request->device_id,
+                                'is_harmful' => $harmful,
+                                'status' => 1
+                            ]);
+                            return $this->sendResponse($successBeauty, 'Found Successfully');
+                        }
+                        else{
+                            continue;
+                        }
+                    }
                 }
             }
-        }
+
 
         Result::create([
             'product_name' => $name,
@@ -325,53 +458,129 @@ class ProductController extends Controller
     public function testCurl(Request $request)
     {
 
+        // $curl = curl_init();
+        // curl_setopt_array($curl, [
+        //     CURLOPT_URL => "https://sephora.p.rapidapi.com/products/v2/search-by-barcode?upcs=3378872105602&country=SG&language=en-SG",
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_FOLLOWLOCATION => true,
+        //     CURLOPT_ENCODING => "",
+        //     CURLOPT_MAXREDIRS => 10,
+        //     CURLOPT_TIMEOUT => 30,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => "GET",
+        //     CURLOPT_HTTPHEADER => [
+        //         "X-RapidAPI-Host: sephora.p.rapidapi.com",
+        //         "X-RapidAPI-Key: e6bc3ce822msh8f140b8144727a9p11e011jsnb59211620217"
+        //     ],
+        // ]);
+
+        // $response = curl_exec($curl);
+        // $err = curl_error($curl);
+
+        // curl_close($curl);
+        // $response = json_decode($response);
+        // if(isset($response->data)){
+        //     $product_id = $response->data->attributes->{'product-id'} ?? '';
+
+        //     $curl = curl_init();
+
+        //     curl_setopt_array($curl, [
+        //         CURLOPT_URL => "https://sephora.p.rapidapi.com/products/v2/detail?id=$product_id&country=SG&language=en-SG",
+        //         CURLOPT_RETURNTRANSFER => true,
+        //         CURLOPT_FOLLOWLOCATION => true,
+        //         CURLOPT_ENCODING => "",
+        //         CURLOPT_MAXREDIRS => 10,
+        //         CURLOPT_TIMEOUT => 30,
+        //         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //         CURLOPT_CUSTOMREQUEST => "GET",
+        //         CURLOPT_HTTPHEADER => [
+        //             "X-RapidAPI-Host: sephora.p.rapidapi.com",
+        //             "X-RapidAPI-Key: e6bc3ce822msh8f140b8144727a9p11e011jsnb59211620217"
+        //         ],
+        //     ]);
+
+        //     $response = curl_exec($curl);
+        //     $response = json_decode($response);
+        //     $image = $response->data->attributes->{'name'};
+        //     print_r($response);
+
+        // }
+
+
         $curl = curl_init();
-                    curl_setopt_array($curl, [
-                        CURLOPT_URL => "https://sephora.p.rapidapi.com/products/v2/search-by-barcode?upcs=3378872105602&country=SG&language=en-SG",
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_ENCODING => "",
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 30,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => "GET",
-                        CURLOPT_HTTPHEADER => [
-                            "X-RapidAPI-Host: sephora.p.rapidapi.com",
-                            "X-RapidAPI-Key: e6bc3ce822msh8f140b8144727a9p11e011jsnb59211620217"
-                        ],
-                    ]);
 
-                    $response = curl_exec($curl);
-                    $err = curl_error($curl);
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://sephora.p.rapidapi.com/v2/auto-complete?query=eyeshadows&country=SG&language=en-SG",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => [
+                "X-RapidAPI-Host: sephora.p.rapidapi.com",
+                "X-RapidAPI-Key: e6bc3ce822msh8f140b8144727a9p11e011jsnb59211620217"
+            ],
+        ]);
 
-                    curl_close($curl);
-                    $response = json_decode($response);
-                    if(isset($response->data)){
-                        $product_id = $response->data->attributes->{'product-id'} ?? '';
+        $response = curl_exec($curl);
+        $response =json_decode($response);
+        foreach($response->included as $product){
+            if(isset($product->attributes->name) && (isset($product->attributes->ingredients) && $product->attributes->ingredients != null)){
+                $proname = $product->attributes->name;
+                $ingredients = $product->attributes->ingredients;
+                $proingredients = explode(', ', $ingredients);
+                $imgUrls = 'image-urls';
+                if(isset($product->attributes->$imgUrls) && !empty($product->attributes->$imgUrls)){
+                    $proimage = $product->attributes->$imgUrls[0];
+                }
 
-                        $curl = curl_init();
+                $cosmeticIngredients = [];
+                foreach ($proingredients as $ingredients) {
+                    $cosmeticIngredients[] = $ingredients;
+                }
+                // Get the common elements between both arrays
+                // $restrictedIngredients = array_intersect($cosmeticIngredients, $restrictedTags);
+                // // Remove the common elements from the first array
+                // $cosmeticIngredients = array_diff($cosmeticIngredients, $restrictedIngredients);
+                // if (empty($restrictedIngredients)) {
+                //     $harmful = 0;
+                // } else {
+                //     $harmful = 1;
+                // }
+                $successBeauty = [];
+                $successBeauty['product_name'] = $proname ?? '';
+                $successBeauty['product_img'] = $proimage ?? '';
+                // $successBeauty['is_harmful'] = $harmful;
+                $successBeauty['ingredients'] = $cosmeticIngredients;
+                // $successBeauty['restrictedIngredients'] = $restrictedIngredients;
+                // Result::create([
+                //     'product_name' => $name,
+                //     'product_img' => $proimage ?? '',
+                //     'ingredients' => $cosmeticIngredients,
+                //     'device_id' => $request->device_id,
+                //     'is_harmful' => $harmful,
+                //     'status' => 1
+                // ]);
+                return $this->sendResponse($successBeauty, 'Found Successfully');
 
-                        curl_setopt_array($curl, [
-                            CURLOPT_URL => "https://sephora.p.rapidapi.com/products/v2/detail?id=$product_id&country=SG&language=en-SG",
-                            CURLOPT_RETURNTRANSFER => true,
-                            CURLOPT_FOLLOWLOCATION => true,
-                            CURLOPT_ENCODING => "",
-                            CURLOPT_MAXREDIRS => 10,
-                            CURLOPT_TIMEOUT => 30,
-                            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                            CURLOPT_CUSTOMREQUEST => "GET",
-                            CURLOPT_HTTPHEADER => [
-                                "X-RapidAPI-Host: sephora.p.rapidapi.com",
-                                "X-RapidAPI-Key: e6bc3ce822msh8f140b8144727a9p11e011jsnb59211620217"
-                            ],
-                        ]);
+            }else{
+                continue;
+            }
 
-                        $response = curl_exec($curl);
-                        $response = json_decode($response);
-                        $image = $response->data->attributes->{'name'};
-                        print_r($image);
 
-                    }
+        }
+        return $response->included;
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;
+        }
 
     }
 
