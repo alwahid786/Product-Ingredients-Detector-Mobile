@@ -55,6 +55,56 @@ class ProductController extends Controller
         $client = new Client();
         // Check If request has product_code & != ""
         if ($request->product_code != "") {
+
+            $api_key = 'f55ken5drokv7g9jzjhwpoqha78bt3';
+            $url = 'https://api.barcodelookup.com/v3/products?barcode='. $request->product_code .'&formatted=y&key=' . $api_key;
+
+            $ch = curl_init(); // Use only one cURL connection for multiple queries
+
+            $data = $this->get_data($url, $ch);
+
+            $response = array();
+            $response = json_decode($data);
+            // start
+            if(isset($response->products[0]->title) && (isset($response->products[0]->ingredients) && $response->products[0]->ingredients != '')){
+                $proname = $response->products[0]->title;
+                $ingredients = $response->products[0]->ingredients;
+                $proingredients = explode(', ', $ingredients);
+                $imgUrls = 'image-urls';
+                if(isset($response->products[0]->images) && !empty($response->products[0]->images)){
+                    $proimage = $response->products[0]->images[0];
+                }
+
+                $cosmeticIngredients = [];
+                foreach ($proingredients as $ingredients) {
+                    $cosmeticIngredients[] = $ingredients;
+                }
+                // Get the common elements between both arrays
+                $restrictedIngredients = array_intersect($cosmeticIngredients, $restrictedTags);
+                // Remove the common elements from the first array
+                $cosmeticIngredients = array_diff($cosmeticIngredients, $restrictedIngredients);
+                if (empty($restrictedIngredients)) {
+                    $harmful = 0;
+                } else {
+                    $harmful = 1;
+                }
+
+                $successBeauty = [];
+                $successBeauty['product_name'] = $proname ?? '';
+                $successBeauty['product_img'] = $proimage ?? '';
+                $successBeauty['is_harmful'] = $harmful;
+                $successBeauty['ingredients'] = $cosmeticIngredients;
+                $successBeauty['restrictedIngredients'] = $restrictedIngredients;
+                Result::create([
+                    'product_name' => $name,
+                    'product_img' => $proimage ?? '',
+                    'ingredients' => $cosmeticIngredients,
+                    'device_id' => $request->device_id,
+                    'is_harmful' => $harmful,
+                    'status' => 1
+                ]);
+                return $this->sendResponse($successBeauty, 'Found Successfully');
+            }
             // $urlFood = 'https://world.openfoodfacts.org/api/v0/product/' . $request->product_code . '.json';
             // $responseFood = $client->request('GET', $urlFood);
             // $responseFood = json_decode($responseFood->getBody()->getContents(), true);
@@ -88,7 +138,7 @@ class ProductController extends Controller
 
             //     ]);
             //     return $this->sendResponse($successFood, 'Found Successfully');
-            // } else {
+            else {
                 $urlBeauty = 'https://world.openbeautyfacts.org/api/v0/product/' . $request->product_code . '.json';
                 // Check for Cosmetic using OpenBeautyFact API
                 $responseCosmetic = $client->request('GET', $urlBeauty);
@@ -189,7 +239,7 @@ class ProductController extends Controller
 
                     }
                 }
-            // }
+            }
         } elseif ($request->product_name != "") {
             // $urlFood = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' . $request->product_name . '&search_simple=1&action=process&json=1&page_size=1';
             // // First Check for Food using OpenFoodFact API
@@ -395,6 +445,7 @@ class ProductController extends Controller
                         }
                     }
                 }
+
                 }
             }
 
@@ -586,8 +637,34 @@ class ProductController extends Controller
 
     }
 
-    public function beautyBay()
+    public function barcodelookup()
     {
+        $api_key = 'f55ken5drokv7g9jzjhwpoqha78bt3';
+        $url = 'https://api.barcodelookup.com/v3/products?barcode=077341125112&formatted=y&key=' . $api_key;
 
+        $ch = curl_init(); // Use only one cURL connection for multiple queries
+
+        $data = $this->get_data($url, $ch);
+
+        $response = array();
+        $response = json_decode($data);
+        echo '<strong>Barcode Number:</strong> ' . $response->products[0]->ingredients . '<br><br>';
+
+        echo '<strong>Title:</strong> ' . $response->products[0]->title . '<br><br>';
+
+        echo '<strong>Entire Response:</strong><pre>';
+        print_r($response);
+        echo '</pre>';
+    }
+
+    public function get_data($url, $ch) {
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        $data = curl_exec($ch);
+        curl_close($ch);
+
+        return $data;
     }
 }

@@ -23,3 +23,6 @@ Route::post('/history', [ProductController::class, 'history']);
 Route::post('/add/tag', [ProductController::class, 'addTag']);
 Route::post('/test_curl', [ProductController::class, 'testCurl']);
 Route::post('/beauty_bay', [ProductController::class, 'beautyBay']);
+
+// search through barcode
+Route::post('/barcodelookup', [ProductController::class, 'barcodelookup']);
