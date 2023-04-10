@@ -55,7 +55,7 @@ class ProductController extends Controller
         $client = new Client();
         // Check If request has product_code & != ""
         if ($request->ingredients != "") {
-            
+
             // Get the common elements between both arrays
             $restrictedIngredients = array_intersect($request->ingredients, $restrictedTags);
             // Remove the common elements from the first array
@@ -68,13 +68,13 @@ class ProductController extends Controller
 
             $success = [];
             $success['product_name'] = "Ingredients Scan";
-            $success['product_img'] = public_path('/assets/images/tulip.svg');
+            $success['product_img'] = "https://kodextech.net/tulip/public/assets/images/tulip.svg";
             $success['is_harmful'] = $harmful;
             $success['ingredients'] = $allIngredients;
             $success['restrictedIngredients'] = $restrictedIngredients;
             Result::create([
                 'product_name' => "Ingredients Scan",
-                'product_img' => public_path('/assets/images/tulip.svg'),
+                'product_img' => "https://kodextech.net/tulip/public/assets/images/tulip.svg",
                 'ingredients' => $allIngredients,
                 'device_id' => $request->device_id,
                 'is_harmful' => $harmful,
