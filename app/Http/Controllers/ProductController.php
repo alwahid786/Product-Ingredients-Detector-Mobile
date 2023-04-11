@@ -58,8 +58,10 @@ class ProductController extends Controller
 
             // Get the common elements between both arrays
             $restrictedIngredients = array_intersect($request->ingredients, $restrictedTags);
+            $restrictedIngredients = array_values($restrictedIngredients);
             // Remove the common elements from the first array
             $allIngredients = array_diff($request->ingredients, $restrictedIngredients);
+            $allIngredients = array_values($allIngredients);
             if (empty($restrictedIngredients)) {
                 $harmful = 0;
             } else {
@@ -316,8 +318,12 @@ class ProductController extends Controller
                     }
                     // Get the common elements between both arrays
                     $restrictedIngredients = array_intersect($cosmeticIngredients, $restrictedTags);
+                    $restrictedIngredients = array_values($restrictedIngredients);
+
                     // Remove the common elements from the first array
                     $cosmeticIngredients = array_diff($cosmeticIngredients, $restrictedIngredients);
+                    $cosmeticIngredients = array_values($cosmeticIngredients);
+
                     if (empty($restrictedIngredients)) {
                         $harmful = 0;
                     } else {
@@ -377,8 +383,12 @@ class ProductController extends Controller
                                 }
                                 // Get the common elements between both arrays
                                 $restrictedIngredients = array_intersect($cosmeticIngredients, $restrictedTags);
+                                $restrictedIngredients = array_values($restrictedIngredients);
+
                                 // Remove the common elements from the first array
                                 $cosmeticIngredients = array_diff($cosmeticIngredients, $restrictedIngredients);
+                                $cosmeticIngredients = array_values($cosmeticIngredients);
+
                                 if (empty($restrictedIngredients)) {
                                     $harmful = 0;
                                 } else {
@@ -443,8 +453,12 @@ class ProductController extends Controller
                             }
                             // Get the common elements between both arrays
                             $restrictedIngredients = array_intersect($cosmeticIngredients, $restrictedTags);
+                            $restrictedIngredients = array_values($restrictedIngredients);
+
                             // Remove the common elements from the first array
                             $cosmeticIngredients = array_diff($cosmeticIngredients, $restrictedIngredients);
+                            $cosmeticIngredients = array_values($cosmeticIngredients);
+
                             if (empty($restrictedIngredients)) {
                                 $harmful = 0;
                             } else {

@@ -70,7 +70,7 @@
                 <form action="{{route('login')}}" method="post" autocomplete="off" id="loginForm">
                     @csrf
                     <div class="px-5 text-center">
-                        <input type="text" name="tag_name" placeholder="Enter Tag Name" autocomplete="false" autofocus="off">
+                        <input type="text" name="tag_name" id="ingre" placeholder="Enter Tag Name" autocomplete="false" autofocus="off">
                         <!-- <input type="password" name="password" placeholder="Enter Password" autocomplete="false" autofocus="off"> -->
                         <button type="submit" data-src="no-validation" class="px-5 py-1 mt-3">+ Add Tag</button>
                     </div>
@@ -104,13 +104,14 @@
                         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                             var response = JSON.parse(this.responseText);
                             if (response.success == true) {
+                                $("#ingre").val('');
                                 swal({
                                     title: "Success",
                                     text: "Tag added to restricted list.",
                                     icon: "success",
                                 });
                             } else {
-                                message = response.message[0][0];
+                                message = response.message;
                                 swal({
                                     title: "Error",
                                     text: message,
