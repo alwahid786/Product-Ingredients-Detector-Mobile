@@ -365,7 +365,6 @@ class ProductController extends Controller
 
                     $response = curl_exec($curl);
                     $response = json_decode($response);
-                    dd($response);
                     if ($response != null) {
                         foreach ($response->included as $product) {
                             if (isset($product->attributes->name) && (isset($product->attributes->ingredients) && $product->attributes->ingredients != null)) {
