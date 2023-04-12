@@ -521,8 +521,10 @@ class ProductController extends Controller
             foreach ($results as $result) {
                 // Get the common elements between both arrays
                 $restrictedIngredients = array_intersect($result['ingredients'], $restrictedTags);
+                $restrictedIngredients = array_values($restrictedIngredients);
                 // Remove the common elements from the first array
                 $result['ingredients'] = array_diff($result['ingredients'], $restrictedIngredients);
+                $result['ingredients'] = array_values($result['ingredients']);
                 $result['restrictedIngredients'] = $restrictedIngredients;
                 if (empty($restrictedIngredients)) {
                     $result['is_harmful'] = 0;
@@ -663,7 +665,7 @@ class ProductController extends Controller
     public function barcodelookup()
     {
         $api_key = 'f55ken5drokv7g9jzjhwpoqha78bt3';
-        $url = 'https://api.barcodelookup.com/v3/products?barcode=077341125112&formatted=y&key=' . $api_key;
+        $url = 'https://api.barcodelookup.com/v3/products?barcode=3614272049529&formatted=y&key=' . $api_key;
 
         $ch = curl_init(); // Use only one cURL connection for multiple queries
 
