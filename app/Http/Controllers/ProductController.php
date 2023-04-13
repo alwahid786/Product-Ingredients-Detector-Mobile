@@ -55,13 +55,32 @@ class ProductController extends Controller
         $client = new Client();
         // Check If request has product_code & != ""
         if ($request->ingredients != "") {
+            $ingredients = $request->input('ingredients');
+
+            $allIngredients = array();
+            $restrictedIngredients = array();
+
+            // Remove restricted tags and add them to $restrictedIngredients
+            foreach ($restrictedTags as $tag) {
+                if (strpos($ingredients, $tag) !== false) {
+                    $ingredients = str_replace($tag, '', $ingredients);
+                    $restrictedIngredients[] = $tag;
+                }
+            }
+
+            // Add remaining ingredients to $allIngredients
+            $remainingIngredients = explode('•', $ingredients);
+            foreach ($remainingIngredients as $ingredient) {
+                $allIngredients[] = trim($ingredient);
+            }
+            // dd($allIngredients);
 
             // Get the common elements between both arrays
-            $restrictedIngredients = array_intersect($request->ingredients, $restrictedTags);
-            $restrictedIngredients = array_values($restrictedIngredients);
-            // Remove the common elements from the first array
-            $allIngredients = array_diff($request->ingredients, $restrictedIngredients);
-            $allIngredients = array_values($allIngredients);
+            // $restrictedIngredients = array_intersect($request->ingredients, $restrictedTags);
+            // $restrictedIngredients = array_values($restrictedIngredients);
+            // // Remove the common elements from the first array
+            // $allIngredients = array_diff($request->ingredients, $restrictedIngredients);
+            // $allIngredients = array_values($allIngredients);
             if (empty($restrictedIngredients)) {
                 $harmful = 0;
             } else {
