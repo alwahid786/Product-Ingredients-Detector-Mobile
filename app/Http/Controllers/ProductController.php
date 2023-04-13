@@ -69,10 +69,10 @@ class ProductController extends Controller
             }
 
             // Add remaining ingredients to $allIngredients
-            $remainingIngredients = explode('•', $ingredients);
-            foreach ($remainingIngredients as $ingredient) {
-                $allIngredients[] = trim($ingredient);
-            }
+            // $remainingIngredients = $ingredients;
+            // foreach ($remainingIngredients as $ingredient) {
+            //     $allIngredients[] = trim($ingredient);
+            // }
             // dd($allIngredients);
 
             // Get the common elements between both arrays
@@ -91,7 +91,7 @@ class ProductController extends Controller
             $success['product_name'] = "Ingredients Scan";
             $success['product_img'] = "https://kodextech.net/tulip/public/assets/images/tulip.svg";
             $success['is_harmful'] = $harmful;
-            $success['ingredients'] = $allIngredients;
+            $success['ingredients'] = $ingredients;
             $success['restrictedIngredients'] = $restrictedIngredients;
             Result::create([
                 'product_name' => "Ingredients Scan",
