@@ -56,19 +56,21 @@ class ProductController extends Controller
         // Check If request has product_code & != ""
         if ($request->ingredients != "") {
             $ingredients = $request->input('ingredients');
+            $ingredients = strtolower($ingredients);
 
             $allIngredients = array();
             $restrictedIngredients = array();
 
             // Remove restricted tags and add them to $restrictedIngredients
             foreach ($restrictedTags as $tag) {
+                $tag = strtolower($tag);
                 if (strpos($ingredients, $tag) !== false) {
                     $ingredients = str_replace($tag, '', $ingredients);
                     $restrictedIngredients[] = $tag;
                 }
             }
 
-                $allIngredients[] = trim($ingredients);
+            $allIngredients[] = trim($ingredients);
             // Add remaining ingredients to $allIngredients
             // $remainingIngredients = $ingredients;
             // foreach ($remainingIngredients as $ingredient) {
