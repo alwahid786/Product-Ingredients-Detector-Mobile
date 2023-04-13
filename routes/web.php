@@ -17,8 +17,9 @@ use App\Http\Controllers\AuthController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/admin', function () {
-    return view('add-tag');
-});
-Route::any('admin/login', [AuthController::class, 'login'])->name('login');
+// Route::get('/admin', function () {
+//     return view('add-tag');
+// });
+Route::any('add-tags', [AuthController::class, 'addTags'])->name('addTags');
+Route::any('delete-tag', [AuthController::class, 'deleteTag'])->name('deleteTag');
 
