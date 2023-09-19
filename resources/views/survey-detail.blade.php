@@ -73,7 +73,7 @@
     <section>
         <div class="container">
             <div class="loginFormDiv px-5 py-4">
-                <button id="backButton" class="backButton">Back butto</button>
+                <button id="backButton" class="backButton">Back to Survey Question</button>
                 <h2 class="text-center">Survey Question</h2>
 
 
