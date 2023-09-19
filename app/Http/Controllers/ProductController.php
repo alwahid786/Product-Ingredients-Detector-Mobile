@@ -724,6 +724,7 @@ class ProductController extends Controller
         foreach($surveyArr as $arr) {
             $query = UserSurvey::create([
                 'user_id' => $request->user_id,
+                'email' => $request->email,
                 'question' => $arr['question'],
                 'answer' => $arr['answer'],
             ]);

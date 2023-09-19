@@ -13,5 +13,6 @@ class UserSurvey extends Model
         'user_id',
         'question',
         'answer',
+        'email'
     ];
 }
