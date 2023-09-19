@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clear Skin</title>
+    <title>Survey</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
@@ -21,7 +21,7 @@
         .container {
             /* height: 100vh; */
             margin-top: 50px;
-            max-width: 800px;
+            max-width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -55,14 +55,14 @@
             width: 100%;
             background-color: white;
         }
-
-        button {
-            background-color: #E9B0A6;
-            border: none;
-            border-radius: 8px;
+        .showDetailbutton{
             color: white;
-            font-size: 22px;
+            background: #E9B0A6;
+            border: none;
+            padding: 8px;
+            font-size: 1rem;
             cursor: pointer;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -91,7 +91,7 @@
                             <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{$survey->email ?? 'n/a'}}</td>
                             <td class="py-2 text-center">
                                 <a href="{{ url('survey-detail/'.$survey->id) }}">
-                                    <button class="btn btn-primary">Show Detail</button>
+                                    <button class="showDetailbutton">Show Detail</button>
                                 </a>
                             </td>
                         </tr>

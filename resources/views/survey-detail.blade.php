@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clear Skin</title>
+    <title>Survey Detail</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
@@ -21,10 +21,10 @@
         .container {
             /* height: 100vh; */
             margin-top: 50px;
-            max-width: 800px;
+            max-width: 100%;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            /* justify-content: center;
+            align-items: center; */
         }
 
         .loginFormDiv {
@@ -56,14 +56,16 @@
             background-color: white;
         }
 
-        button {
-            background-color: #E9B0A6;
-            border: none;
-            border-radius: 8px;
+        .backButton{
             color: white;
-            font-size: 22px;
+            background: #E9B0A6;
+            border: none;
+            padding: 8px;
+            font-size: 1rem;
             cursor: pointer;
+            border-radius: 5px;
         }
+
     </style>
 </head>
 
@@ -71,10 +73,11 @@
     <section>
         <div class="container">
             <div class="loginFormDiv px-5 py-4">
+                <button id="backButton" class="backButton">Back butto</button>
                 <h2 class="text-center">Survey Question</h2>
 
 
-                <table id="" class="display" style="width:100%">
+                <table id="" class="display" style="width:100%; margin-top: 70px;">
                     <thead>
                         <tr>
                             <th>Question</th>
@@ -112,6 +115,12 @@
                 "bAutoWidth": false
             });
         })
+
+        $('#backButton').click(function() {
+            window.history.back();
+        })
+
+
     </script>
 </body>
 
