@@ -10,6 +10,7 @@ use App\Http\Traits\ResponseTrait;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Result;
 use App\Models\Tags;
+use App\Models\UserSurvey;
 
 class ProductController extends Controller
 {
@@ -713,5 +714,27 @@ class ProductController extends Controller
         curl_close($ch);
 
         return $data;
+    }
+
+    public function addSurvey(Request $request)
+    {
+        $surveyArr = $request->survay;
+        $responses = [];
+
+        foreach($surveyArr as $arr) {
+            $query = UserSurvey::create([
+                'user_id' => $request->user_id,
+                'question' => $arr['question'],
+                'answer' => $arr['answer'],
+            ]);
+
+            $responses[] = $query;
+        }
+
+        if (!empty($responses)) {
+            return $this->sendResponse($responses, 'Survey Responses Created Successfully');
+        } else {
+            return $this->sendError('Failed to create survey responses');
+        }
     }
 }
