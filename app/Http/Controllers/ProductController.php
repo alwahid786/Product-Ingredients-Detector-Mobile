@@ -720,7 +720,7 @@ class ProductController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users',
+            'user_id' => 'required|exists:users,id',
         ]);
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
