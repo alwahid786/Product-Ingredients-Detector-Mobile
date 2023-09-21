@@ -78,21 +78,27 @@
                     <thead>
                         <tr>
                             <th>Sr #</th>
-                            <th>Name</th>
                             <th>Email</th>
+                            <th>Created Date</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php $count = 0; ?>
                         @foreach($surveyUser as $user)
+                        <?php
+                        $dateString = $user->user->created_at;
 
+                        $dateTime = new DateTime($dateString);
+
+                        $readableDate = $dateTime->format('F j, Y g:i A');
+                        ?>
                         <tr>
                             <td class="py-2">{{$count}}</td>
-                            <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ $user->user->name ?? 'n/a' }}</td>
-                            <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{$user->user->email ?? 'n/a'}}</td>
+                            <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ ($user->user->email == '') ? 'n/a' : $user->user->email; }}</td>
+                            <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ $readableDate }}</td>
                             <td class="py-2 text-center">
-                                <a href="{{ url('survey-detail/'.$user->user->id) }}">
+                                <a href="{{ url('survey-detail/'.$user->user->device_id) }}">
                                     <button class="showDetailbutton">Show Detail</button>
                                 </a>
                             </td>

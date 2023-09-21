@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Result;
 use App\Models\Tags;
 use App\Models\UserSurvey;
+use App\Models\User;
 
 class ProductController extends Controller
 {
@@ -719,11 +720,22 @@ class ProductController extends Controller
     public function addSurvey(Request $request)
     {
 
-        $validator = Validator::make($request->all(), [
-            'user_id' => 'required|exists:users,id',
-        ]);
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
+        // $validator = Validator::make($request->all(), [
+        //     'user_id' => 'required|exists:users,device_id',
+        // ]);
+        // if ($validator->fails()) {
+        //     return $this->sendError('Validation Error.', $validator->errors());
+        // }
+
+        $checkUser = User::where('device_id', $request->device_id)->get();
+        // dd($checkUser);
+        if (count($checkUser) == 0) {
+            $createUser = User::create([
+                'device_id' => $request->device_id,
+                'name' => '',
+                'email' => $request->email ?? '',
+                'password' => '12345',
+            ]);
         }
 
         $surveyArr = $request->survay;
@@ -731,7 +743,7 @@ class ProductController extends Controller
 
         foreach($surveyArr as $arr) {
             $query = UserSurvey::create([
-                'user_id' => $request->user_id,
+                'user_id' => $request->device_id,
                 'email' => $request->email,
                 'question' => $arr['question'],
                 'answer' => $arr['answer'],
