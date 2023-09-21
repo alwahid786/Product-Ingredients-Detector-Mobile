@@ -85,11 +85,11 @@
                     </thead>
                     <tbody>
                         <?php $count = 0; ?>
-                        @foreach($surveyData as $survey)
+                        @foreach($surveyUser as $user)
                         <?php
                             $count++;
 
-                            $dateString = $survey->created_at;
+                            $dateString = $user->user->created_at;
 
                             $dateTime = new DateTime($dateString);
 
@@ -97,10 +97,10 @@
                         ?>
                         <tr>
                             <td class="py-2">{{$count}}</td>
-                            <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{$survey->email ?? 'n/a'}}</td>
+                            <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{$user->user->email ?? 'n/a'}}</td>
                             <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ $readableDate }}</td>
                             <td class="py-2 text-center">
-                                <a href="{{ url('survey-detail/'.$survey->id) }}">
+                                <a href="{{ url('survey-detail/'.$user->user->id) }}">
                                     <button class="showDetailbutton">Show Detail</button>
                                 </a>
                             </td>

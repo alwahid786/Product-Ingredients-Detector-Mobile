@@ -73,20 +73,22 @@
     <section>
         <div class="container">
             <div class="loginFormDiv px-5 py-4">
-                <button id="backButton" class="backButton">Back to Survey Question</button>
+                <button id="backButton" class="backButton">Back to Users</button>
                 <h2 class="text-center">Survey Question</h2>
 
 
                 <table id="" class="display" style="width:100%; margin-top: 70px;">
                     <thead>
                         <tr>
-                            <th>Question</th>
+                            <th class="text-center pr-3">#</th>
+                            <th class="text-center">Question</th>
                             <th class="text-center">Answer</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($survey as $data)
                         <tr>
+                            <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ $count++ }}</td>
                             <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{$data->question ?? 'n/a'}}</td>
                             <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{$data->answer ?? 'n/a'}}</td>
                         </tr>

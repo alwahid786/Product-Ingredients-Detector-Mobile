@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tags;
 use App\Models\UserSurvey;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -27,13 +28,17 @@ class AuthController extends Controller
 
     public function showSurvey(Request $request)
     {
-        $surveyData = UserSurvey::get();
-        return view('show-survey', ['surveyData' => $surveyData]);
+        $surveyUsers = UserSurvey::select('user_id')
+            ->distinct()
+            ->with('user')
+            ->get();
+        return view('show-survey', ['surveyUser' => $surveyUsers]);
     }
 
     public function showDetail(Request $request, $id)
     {
-        $survey = UserSurvey::where('id', $id)->get();
-        return view('survey-detail', ['survey' => $survey]);
+        $survey = UserSurvey::where('user_id', $id)->get();
+        $count = 0;
+        return view('survey-detail', ['survey' => $survey, 'count' => $count]);
     }
 }
