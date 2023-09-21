@@ -83,14 +83,16 @@
                             <th class="text-center pr-3">#</th>
                             <th class="text-center">Question</th>
                             <th class="text-center">Answer</th>
+                            <th class="text-center">Email</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($survey as $data)
                         <tr>
-                            <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ $count++ }}</td>
-                            <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{$data->question ?? 'n/a'}}</td>
-                            <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{$data->answer ?? 'n/a'}}</td>
+                            <td class="p-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ $data->user_id }}</td>
+                            <td class="p-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{$data->question ?? 'n/a'}}</td>
+                            <td class="p-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{$data->answer ?? 'n/a'}}</td>
+                            <td class="p-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{$data->email ?? 'n/a'}}</td>
                         </tr>
                         @endforeach
                     </tbody>

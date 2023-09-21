@@ -720,23 +720,21 @@ class ProductController extends Controller
     public function addSurvey(Request $request)
     {
 
-        // $validator = Validator::make($request->all(), [
-        //     'user_id' => 'required|exists:users,device_id',
-        // ]);
-        // if ($validator->fails()) {
-        //     return $this->sendError('Validation Error.', $validator->errors());
-        // }
-
-        $checkUser = User::where('device_id', $request->device_id)->get();
-        // dd($checkUser);
-        if (count($checkUser) == 0) {
-            $createUser = User::create([
-                'device_id' => $request->device_id,
-                'name' => '',
-                'email' => $request->email ?? '',
-                'password' => '12345',
-            ]);
+        $validator = Validator::make($request->all(), [
+            'device_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
         }
+
+        $user = User::updateOrCreate(
+            ['device_id' => $request->device_id],
+            [
+                'name' => $request->name ?? '',
+                'email' => $request->email ?? '',
+                'password' => bcrypt('12345'), // Hash the password for security
+            ]
+        );
 
         $surveyArr = $request->survay;
         $responses = [];

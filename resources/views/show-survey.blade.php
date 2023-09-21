@@ -78,7 +78,7 @@
                     <thead>
                         <tr>
                             <th>Sr #</th>
-                            <th>Email</th>
+                            <th>Device Id</th>
                             <th>Created Date</th>
                             <th class="text-center">Action</th>
                         </tr>
@@ -95,7 +95,7 @@
                         ?>
                         <tr>
                             <td class="py-2">{{$count}}</td>
-                            <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ ($user->user->email == '') ? 'n/a' : $user->user->email; }}</td>
+                            <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ $user->user->device_id }}</td>
                             <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ $readableDate }}</td>
                             <td class="py-2 text-center">
                                 <a href="{{ url('survey-detail/'.$user->user->device_id) }}">
