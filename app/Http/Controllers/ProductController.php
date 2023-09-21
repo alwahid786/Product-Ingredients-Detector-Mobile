@@ -718,6 +718,14 @@ class ProductController extends Controller
 
     public function addSurvey(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|exists:users',
+        ]);
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
         $surveyArr = $request->survay;
         $responses = [];
 
