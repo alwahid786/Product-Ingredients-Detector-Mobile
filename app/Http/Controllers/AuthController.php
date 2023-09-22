@@ -39,6 +39,7 @@ class AuthController extends Controller
     {
         $survey = UserSurvey::where('user_id', $id)->get();
         $count = 0;
-        return view('survey-detail', ['survey' => $survey, 'count' => $count]);
+        $prevEmail = null;
+        return view('survey-detail', ['survey' => $survey, 'count' => $count, 'prevEmail' => $prevEmail]);
     }
 }

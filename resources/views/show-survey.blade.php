@@ -95,8 +95,8 @@
                         ?>
                         <tr>
                             <td class="py-2">{{$count}}</td>
-                            <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ $user->user->device_id }}</td>
-                            <td class="py-2" style="color: #E9B0A6 ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ $readableDate }}</td>
+                            <td class="py-2" style="color: #8c8c8c ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ $user->user->device_id }}</td>
+                            <td class="py-2" style="color: #8c8c8c ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ $readableDate }}</td>
                             <td class="py-2 text-center">
                                 <a href="{{ url('survey-detail/'.$user->user->device_id) }}">
                                     <button class="showDetailbutton">Show Detail</button>
