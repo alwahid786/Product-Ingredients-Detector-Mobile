@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class UserSurvey extends Model
 {
@@ -20,5 +21,8 @@ class UserSurvey extends Model
     {
         return $this->hasOne(User::class, 'device_id', 'user_id');
     }
-
+    public static function getsurveyresult(){
+        $result = DB::table('user_surveys')->select('user_id','question','answer')->get()->toArray();
+        return  $result;
+    }
 }

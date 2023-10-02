@@ -24,4 +24,5 @@ Route::any('add-tags', [AuthController::class, 'addTags'])->name('addTags');
 Route::any('delete-tag', [AuthController::class, 'deleteTag'])->name('deleteTag');
 Route::any('show-survey', [AuthController::class, 'showSurvey'])->name('showSurvey');
 Route::any('survey-detail/{id}', [AuthController::class, 'showDetail']);
+Route::get('/export-excel', [AuthController::class, 'exporttoexcel'])->name('export-excel');
 

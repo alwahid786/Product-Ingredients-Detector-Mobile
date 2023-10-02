@@ -7,7 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Survey</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
@@ -55,7 +56,8 @@
             width: 100%;
             background-color: white;
         }
-        .showDetailbutton{
+
+        .showDetailbutton {
             color: white;
             background: #E9B0A6;
             border: none;
@@ -63,6 +65,25 @@
             font-size: 1rem;
             cursor: pointer;
             border-radius: 5px;
+        }
+
+        .top-right-button {
+            position: absolute;
+            top: 55px;
+            right: 16px;
+            margin: 10px;
+            z-index: 1;
+            padding: 10px 20px;
+            background-color: #f1c2bf;
+            color: #808080;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .top-right-button:hover {
+            background-color: #f5b7b3;
         }
     </style>
 </head>
@@ -72,8 +93,9 @@
         <div class="container">
             <div class="loginFormDiv px-5 py-4">
                 <h2 class="text-center">Survey Question</h2>
-
-
+                <a href="{{ route('export-excel') }}">
+                    <button class="top-right-button">Export Data</button>
+                </a>
                 <table id="example" class="display" style="width:100%">
                     <thead>
                         <tr>
@@ -85,24 +107,28 @@
                     </thead>
                     <tbody>
                         <?php $count = 0; ?>
-                        @foreach($surveyUser as $user)
-                        <?php
-                        $dateString = $user->user->created_at;
-
-                        $dateTime = new DateTime($dateString);
-
-                        $readableDate = $dateTime->format('F j, Y g:i A');
-                        ?>
-                        <tr>
-                            <td class="py-2">{{$count}}</td>
-                            <td class="py-2" style="color: #8c8c8c ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ $user->user->device_id }}</td>
-                            <td class="py-2" style="color: #8c8c8c ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">{{ $readableDate }}</td>
-                            <td class="py-2 text-center">
-                                <a href="{{ url('survey-detail/'.$user->user->device_id) }}">
-                                    <button class="showDetailbutton">Show Detail</button>
-                                </a>
-                            </td>
-                        </tr>
+                        @foreach ($surveyUser as $user)
+                            <?php
+                            $dateString = $user->user->created_at;
+                            
+                            $dateTime = new DateTime($dateString);
+                            
+                            $readableDate = $dateTime->format('F j, Y g:i A');
+                            ?>
+                            <tr>
+                                <td class="py-2">{{ $count }}</td>
+                                <td class="py-2"
+                                    style="color: #8c8c8c ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">
+                                    {{ $user->user->device_id }}</td>
+                                <td class="py-2"
+                                    style="color: #8c8c8c ; font-size:18px; font-family: 'Roboto', sans-serif !important; font-weight:400;">
+                                    {{ $readableDate }}</td>
+                                <td class="py-2 text-center">
+                                    <a href="{{ url('survey-detail/' . $user->user->device_id) }}">
+                                        <button class="showDetailbutton">Show Detail</button>
+                                    </a>
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
@@ -110,34 +136,41 @@
         </div>
     </section>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
-    @if(session()->has('success'))
-    <script>
-        $(document).ready(function() {
-            swal({
-                title: "Success",
-                text: "Tag removed from restricted list.",
-                icon: "success",
+
+    @if (session()->has('success'))
+        <script>
+            $(document).ready(function() {
+                swal({
+                    title: "Success",
+                    text: "Tag removed from restricted list.",
+                    icon: "success",
+                });
             });
-        });
-    </script>
+        </script>
     @endif
-    @if(session()->has('error'))
-    <script>
-        $(document).ready(function() {
-            swal({
-                title: "Error",
-                text: "Something went wrong, try again.",
-                icon: "error",
+    @if (session()->has('error'))
+        <script>
+            $(document).ready(function() {
+                swal({
+                    title: "Error",
+                    text: "Something went wrong, try again.",
+                    icon: "error",
+                });
             });
-        });
-    </script>
+        </script>
     @endif
 
     <script>
