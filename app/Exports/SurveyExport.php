@@ -12,14 +12,21 @@ class SurveyExport implements FromCollection,WithHeadings
     */
     public function collection()
     {
-        return collect(UserSurvey::getsurveyresult());
+        $users = User::get();
+        return collect($users);
     }
 
     public function headings():array{
         return [
             'Device_Id',
             'Question',
-            'Answer'
+            'Answer',
+            'Answer',
+            'Answer',
+            'Answer',
+            'Answer',
+            'Answer',
+            'Answer',
         ];
     }
 }
