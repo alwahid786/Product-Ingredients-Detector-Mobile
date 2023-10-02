@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\User;
+use App\Models\UserSurvey;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 class SurveyExport implements FromCollection,WithHeadings
@@ -12,21 +12,15 @@ class SurveyExport implements FromCollection,WithHeadings
     */
     public function collection()
     {
-        $users = User::get();
-        return collect($users);
+        $result = UserSurvey::select('user_id','question','answer')->get()->toArray();
+        return collect($result);
     }
 
     public function headings():array{
         return [
             'Device_Id',
             'Question',
-            'Answer',
-            'Answer',
-            'Answer',
-            'Answer',
-            'Answer',
-            'Answer',
-            'Answer',
+            'Answer'
         ];
     }
 }
