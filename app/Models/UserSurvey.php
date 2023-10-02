@@ -22,7 +22,33 @@ class UserSurvey extends Model
         return $this->hasOne(User::class, 'device_id', 'user_id');
     }
     public static function getsurveyresult(){
-        $result = DB::table('user_surveys')->select('user_id','question','answer')->get()->toArray();
-        return  $result;
+        // $results = DB::table('user_surveys')->select('user_id','question','answer')->get()->toArray();
+
+        // $distinctUserIds = [];
+
+        // foreach ($results as $result) {
+        //     if (!in_array($result->user_id, $distinctUserIds)) {
+        //         $distinctUserIds[] = $result->user_id;
+        //     } else {
+        //         $result->user_id = null;
+        //     }
+        // }
+        // return $result;
+        $results = DB::table('user_surveys')->select('user_id', 'question', 'answer')->get()->toArray();
+
+        $distinctUserIds = [];
+        $modifiedResults = [];
+
+        foreach ($results as $result) {
+            if (!in_array($result->user_id, $distinctUserIds)) {
+                $distinctUserIds[] = $result->user_id;
+                $modifiedResults[] = $result;
+            } else {
+                $result->user_id = null;
+                $modifiedResults[] = $result;
+            }
+        }
+
+        return $modifiedResults;
     }
 }
