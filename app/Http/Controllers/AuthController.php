@@ -46,7 +46,6 @@ class AuthController extends Controller
     }
 public function exporttoexcel()
 {
-    // return Excel::download(new SurveyExport, 'survey.xlsx');
-    return Excel::download(new SurveyExport, 'users.csv', \Maatwebsite\Excel\Excel::CSV);
+    return Excel::download(new SurveyExport, 'survey-data.csv', \Maatwebsite\Excel\Excel::CSV);
 }
 }
