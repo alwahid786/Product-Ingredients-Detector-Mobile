@@ -7,7 +7,7 @@ use App\Models\Tags;
 use App\Models\UserSurvey;
 use App\Models\User;
 use App\Exports\SurveyExport;
-Use Excel;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AuthController extends Controller
 {
@@ -44,7 +44,8 @@ class AuthController extends Controller
         $prevEmail = null;
         return view('survey-detail', ['survey' => $survey, 'count' => $count, 'prevEmail' => $prevEmail]);
     }
-    public function exporttoexcel(){
-         return Excel::download(new SurveyExport,'survey-excel.xlsx');
-    }
+public function exporttoexcel()
+{
+    return Excel::download(new SurveyExport, 'survey-excel.xlsx');
+}
 }
