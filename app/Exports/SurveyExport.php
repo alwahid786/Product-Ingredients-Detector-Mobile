@@ -12,7 +12,7 @@ class SurveyExport implements FromCollection,WithHeadings
     */
     public function collection()
     {
-        $result = UserSurvey::select('user_id','question','answer')->get();
+        $result = UserSurvey::get();
         return collect($result);
     }
 
